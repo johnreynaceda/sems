@@ -58,7 +58,7 @@
                     href="#">
                     Overview
                 </a>
-                <a class="px-2 py-2 text-sm text-gray-500 lg:px-6 md:px-3 hover:text-main hover:font-medium hover:scale-x-110"
+                <a class="{{ request()->routeIs('expenses-transaction') || request()->routeIs('expenses-category') || request()->routeIs('sales-category') || request()->routeIs('sales-transaction') ? 'fill-main text-main font-medium scale-x-110' : '' }} px-2 py-2 text-sm text-gray-500 lg:px-6 md:px-3 hover:text-main hover:font-medium hover:scale-x-110"
                     href="{{ route('management') }}">
                     Management
                 </a>
@@ -146,7 +146,7 @@
                                 <span>NEW SALE</span>
                             </a>
 
-                            <a href=""
+                            <a href="{{ route('expenses-transaction') }}"
                                 class="px-4 py-2 text-sm text-red-500 flex items-center space-x-1  font-medium fill-red-600 hover:font-bold hover:border-b-2 hover:border-red-600"
                                 role="menuitem" tabindex="-1" id="user-menu-item-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4">
