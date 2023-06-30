@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->route('login ');
+    return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
@@ -33,6 +33,15 @@ Route::get('/management/sales-transaction', function () {
 Route::get('/management/sales-category', function () {
     return view('pages.sales-category');
 })->middleware(['auth', 'verified'])->name('sales-category');
+
+//expense
+Route::get('/management/expenses-transaction', function () {
+    return view('pages.expenses-transaction');
+})->middleware(['auth', 'verified'])->name('expenses-transaction');
+Route::get('/management/expenses-category', function () {
+    return view('pages.expenses-category');
+})->middleware(['auth', 'verified'])->name('expenses-category');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

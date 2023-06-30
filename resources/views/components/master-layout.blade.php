@@ -26,7 +26,7 @@
 </head>
 
 <body class="font-sans antialiased relative">
-    <div class="absolute top-0 right-0 bottom-0 left-0 bg-cover  w-full h-full overflow-hidden opacity-5">
+    <div class="fixed top-0 right-0 bottom-0 left-0 object-cover bg-cover w-full h-full overflow-hidden opacity-5">
         <x-svg.bg />
     </div>
     <div class="w-full mx-auto relative border-b border-main/50 2xl:max-w-7xl">
@@ -105,17 +105,59 @@
                                 Settings
                             </a>
 
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-500" role="menuitem"
-                                tabindex="-1" id="user-menu-item-2">
-                                Sign out
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <a href="#"
+                                    onclick="event.preventDefault();
+                              this.closest('form').submit();"
+                                    class="block px-4 py-2 text-sm text-gray-500" role="menuitem" tabindex="-1"
+                                    id="user-menu-item-2">
+                                    Sign out
+                                </a>
+                            </form>
+                        </div>
+                    </div>
+                    <div x-data="{ transaction: false }">
+                        <button @click="transaction = !transaction" @click.away="transaction = false"
+                            class="inline-flex items-center justify-center p-2 text-sm font-semibold text-white bg-main rounded-full group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 hover:bg-green-600 active:bg-green-600   fill-white focus-visible:outline-blue-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24">
+                                <path
+                                    d="M16 2L21 7V21.0082C21 21.556 20.5551 22 20.0066 22H3.9934C3.44476 22 3 21.5447 3 21.0082V2.9918C3 2.44405 3.44495 2 3.9934 2H16ZM11 11H8V13H11V16H13V13H16V11H13V8H11V11Z">
+                                </path>
+                            </svg>
+                        </button>
+                        <div x-show="transaction" x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="transform opacity-0 scale-95"
+                            x-transition:enter-end="transform opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="transform opacity-100 scale-100"
+                            x-transition:leave-end="transform opacity-0 scale-95"
+                            class="absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                            role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button"
+                            tabindex="-1" style="display: none;">
+                            <a href="{{ route('sales-transaction') }}"
+                                class="px-4 py-2 text-sm text-green-600 flex items-center space-x-1 font-medium fill-green-600 hover:font-bold hover:border-b-2 hover:border-green-600"
+                                role="menuitem" tabindex="-1" id="user-menu-item-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4">
+                                    <path
+                                        d="M16 2L21 7V21.0082C21 21.556 20.5551 22 20.0066 22H3.9934C3.44476 22 3 21.5447 3 21.0082V2.9918C3 2.44405 3.44495 2 3.9934 2H16ZM11 11H8V13H11V16H13V13H16V11H13V8H11V11Z">
+                                    </path>
+                                </svg>
+                                <span>NEW SALE</span>
+                            </a>
+
+                            <a href=""
+                                class="px-4 py-2 text-sm text-red-500 flex items-center space-x-1  font-medium fill-red-600 hover:font-bold hover:border-b-2 hover:border-red-600"
+                                role="menuitem" tabindex="-1" id="user-menu-item-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4">
+                                    <path
+                                        d="M16 2L21 7V21.0082C21 21.556 20.5551 22 20.0066 22H3.9934C3.44476 22 3 21.5447 3 21.0082V2.9918C3 2.44405 3.44495 2 3.9934 2H16ZM11 11H8V13H11V16H13V13H16V11H13V8H11V11Z">
+                                    </path>
+                                </svg>
+                                <span>NEW EXPENSE</span>
                             </a>
                         </div>
                     </div>
-                    <button
-                        class="inline-flex items-center justify-center p-4 text-sm font-semibold text-white bg-black rounded-full group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 hover:bg-gray-700 active:bg-gray-800 active:text-white focus-visible:outline-blue-900">
-                        <ion-icon name="add-outline" role="img" class="md hydrated" aria-label="add outline">
-                        </ion-icon>
-                    </button>
                 </div>
             </nav>
         </div>
@@ -165,6 +207,7 @@
             {{ $slot }}
         </main>
     </div>
+
 </body>
 
 </html>

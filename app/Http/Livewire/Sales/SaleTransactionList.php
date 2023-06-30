@@ -17,6 +17,7 @@ use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use App\Models\SaleCategory;
+use App\Models\SalesCategoryTransaction;
 
 class SaleTransactionList extends Component implements Tables\Contracts\HasTable
 {
@@ -32,18 +33,34 @@ class SaleTransactionList extends Component implements Tables\Contracts\HasTable
         return [
             Action::make('new Category')->label('New Sales Transaction')->button()->icon('heroicon-o-plus')->action(
                 function ($record, $data) {
+                    
                     $sum = 0;
                     foreach ($data['category_selection'] as $key => $item) {
                         $sum += intval($item['amount']);
                     }
-                    dd($sum);
+                    DB::beginTransaction();
+                     $sale = SalesTransaction::create([
+                        'or_number' => $data['or_number'],
+                        'name' => $data['name'],
+                        'total_amount' => $sum,
+                     ]);
+
+                     foreach ($data['category_selection'] as $key => $item) {
+                        SalesCategoryTransaction::create([
+                            'sales_transaction_id' => $sale->id,
+                            'sale_category_id' => $item['sale_category_id'],
+                            'amount' => $item['amount'],
+                        ]);
+                     }
+                     
+                    DB::commit();
                 }
             )->form(
                     [
 
                         Grid::make(3)
                             ->schema([
-                                TextInput::make('or_number')->label('Official Receipt Number')->required(),
+                                TextInput::make('or_number')->label('Official Receipt Number')->required()->unique(),
                             ]),
                         Grid::make(1)
                             ->schema([
@@ -54,7 +71,7 @@ class SaleTransactionList extends Component implements Tables\Contracts\HasTable
                                 Select::make('sale_category_id')->label('Sale Category')
                                     ->options(SaleCategory::pluck('name', 'id'))
                                     ->required(),
-                                TextInput::make('amount')->required(),
+                                TextInput::make('amount')->numeric()->required()->prefix('₱'),
                             ])
                             ->columns(2)->collapsible()
                     ]
@@ -69,9 +86,28 @@ class SaleTransactionList extends Component implements Tables\Contracts\HasTable
                 function ($record) {
                     return strtoupper($record->or_number);
                 }
+            ),
+            TextColumn::make('name')->label('FULL NAME')->searchable()->formatStateUsing(
+                function ($record) {
+                    return strtoupper($record->name);
+                }
+            ),
+            TextColumn::make('total_amount')->label('TOTAL PAYMENT')->searchable()->formatStateUsing(
+                function ($record) {
+                    return '₱'. number_format($record->total_amount,2);
+                }
             )
         ];
     }
+
+    protected function getTableActions(): array
+    {
+        return [ 
+           Action::make('view')->label('View Transaction')->icon('heroicon-o-document-text')->color('success'),
+            Tables\Actions\DeleteAction::make(),
+        ]; 
+    }
+
     public function render()
     {
         return view('livewire.sales.sale-transaction-list');
