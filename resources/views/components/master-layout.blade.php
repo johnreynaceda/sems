@@ -54,11 +54,11 @@
             </div>
             <nav :class="{ 'flex': open, 'hidden': !open }"
                 class="flex-col items-center flex-grow hidden md:pb-0 md:flex md:justify-end md:flex-row">
-                <a class="px-2 py-2 text-sm text-gray-500 lg:px-6 md:px-3 hover:text-main hover:font-medium hover:scale-x-110 lg:ml-auto"
-                    href="#">
+                <a class=" {{ request()->routeIs('dashboard') ? 'fill-main text-main font-medium scale-x-110' : '' }}px-2 py-2 text-sm text-gray-500 lg:px-6 md:px-3 hover:text-main hover:font-medium hover:scale-x-110 lg:ml-auto"
+                    href="{{ route('dashboard') }}">
                     Overview
                 </a>
-                <a class="{{ request()->routeIs('expenses-transaction') || request()->routeIs('expenses-category') || request()->routeIs('sales-category') || request()->routeIs('sales-transaction') ? 'fill-main text-main font-medium scale-x-110' : '' }} px-2 py-2 text-sm text-gray-500 lg:px-6 md:px-3 hover:text-main hover:font-medium hover:scale-x-110"
+                <a class="{{ request()->routeIs('expenses-transaction') || request()->routeIs('management') || request()->routeIs('expenses-category') || request()->routeIs('sales-category') || request()->routeIs('sales-transaction') ? 'fill-main text-main font-medium scale-x-110' : '' }} px-2 py-2 text-sm text-gray-500 lg:px-6 md:px-3 hover:text-main hover:font-medium hover:scale-x-110"
                     href="{{ route('management') }}">
                     Management
                 </a>
