@@ -34,27 +34,28 @@ class ExpenseTransactionList extends Component implements Tables\Contracts\HasTa
         return [
             Action::make('new Category')->label('New Expense Transaction')->button()->icon('heroicon-o-plus')->action(
                 function ($record, $data) {
-                    
+
                     $sum = 0;
                     foreach ($data['category_selection'] as $key => $item) {
                         $sum += intval($item['amount']);
                     }
                     DB::beginTransaction();
-                     $expense = ExpenseTransaction::create([
+                    $expense = ExpenseTransaction::create([
                         'voucher_number' => $data['voucher_number'],
                         'name' => $data['name'],
                         'total_amount' => $sum,
                         'note' => $data['note'],
-                     ]);
+                        'user_id' => auth()->user()->id,
+                    ]);
 
-                     foreach ($data['category_selection'] as $key => $item) {
+                    foreach ($data['category_selection'] as $key => $item) {
                         ExpenseCategoryTransaction::create([
                             'expense_transaction_id' => $expense->id,
                             'expense_category_id' => $item['expense_category_id'],
                             'amount' => $item['amount'],
                         ]);
-                     }
-                     
+                    }
+
                     DB::commit();
                 }
             )->form(
@@ -68,7 +69,7 @@ class ExpenseTransactionList extends Component implements Tables\Contracts\HasTa
                             ->schema([
                                 TextInput::make('name')->label('Name')->required(),
                             ]),
-                            Textarea::make('note')->required(),
+                        Textarea::make('note')->required(),
                         Repeater::make('category_selection')->label('Category Selection')
                             ->schema([
                                 Select::make('expense_category_id')->label('Expense Category')
@@ -97,7 +98,7 @@ class ExpenseTransactionList extends Component implements Tables\Contracts\HasTa
             ),
             TextColumn::make('total_amount')->label('TOTAL PAYMENT')->searchable()->formatStateUsing(
                 function ($record) {
-                    return '₱'. number_format($record->total_amount,2);
+                    return '₱' . number_format($record->total_amount, 2);
                 }
             )
         ];
@@ -105,10 +106,10 @@ class ExpenseTransactionList extends Component implements Tables\Contracts\HasTa
 
     protected function getTableActions(): array
     {
-        return [ 
-           Action::make('view')->label('View Transaction')->icon('heroicon-o-document-text')->color('success'),
+        return [
+            Action::make('view')->label('View Transaction')->icon('heroicon-o-document-text')->color('success'),
             Tables\Actions\DeleteAction::make(),
-        ]; 
+        ];
     }
 
     public function render()

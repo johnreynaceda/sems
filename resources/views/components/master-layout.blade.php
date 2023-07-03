@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <link rel="shortcut icon" href="{{ asset('images/LOGO.png') }}" />
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
@@ -70,6 +70,12 @@
                     href="#">
                     Settings
                 </a>
+                @if (auth()->user()->id == 1)
+                    <a class="{{ request()->routeIs('account') ? 'fill-main text-main font-medium scale-x-110' : '' }} px-2 py-2 text-sm text-gray-500 lg:px-6 md:px-3 hover:text-main hover:font-medium hover:scale-x-110"
+                        href="{{ route('account') }}">
+                        Account
+                    </a>
+                @endif
 
                 <div class="inline-flex items-center gap-2 list-none lg:ml-auto">
                     <div class="relative flex-shrink-0 ml-5" @click.away="open = false" x-data="{ open: false }">

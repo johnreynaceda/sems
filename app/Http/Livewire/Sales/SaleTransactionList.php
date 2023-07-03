@@ -33,26 +33,27 @@ class SaleTransactionList extends Component implements Tables\Contracts\HasTable
         return [
             Action::make('new Category')->label('New Sales Transaction')->button()->icon('heroicon-o-plus')->action(
                 function ($record, $data) {
-                    
+
                     $sum = 0;
                     foreach ($data['category_selection'] as $key => $item) {
                         $sum += intval($item['amount']);
                     }
                     DB::beginTransaction();
-                     $sale = SalesTransaction::create([
+                    $sale = SalesTransaction::create([
                         'or_number' => $data['or_number'],
                         'name' => $data['name'],
                         'total_amount' => $sum,
-                     ]);
+                        'user_id' => auth()->user()->id,
+                    ]);
 
-                     foreach ($data['category_selection'] as $key => $item) {
+                    foreach ($data['category_selection'] as $key => $item) {
                         SalesCategoryTransaction::create([
                             'sales_transaction_id' => $sale->id,
                             'sale_category_id' => $item['sale_category_id'],
                             'amount' => $item['amount'],
                         ]);
-                     }
-                     
+                    }
+
                     DB::commit();
                 }
             )->form(
@@ -94,7 +95,7 @@ class SaleTransactionList extends Component implements Tables\Contracts\HasTable
             ),
             TextColumn::make('total_amount')->label('TOTAL PAYMENT')->searchable()->formatStateUsing(
                 function ($record) {
-                    return '₱'. number_format($record->total_amount,2);
+                    return '₱' . number_format($record->total_amount, 2);
                 }
             )
         ];
@@ -102,10 +103,10 @@ class SaleTransactionList extends Component implements Tables\Contracts\HasTable
 
     protected function getTableActions(): array
     {
-        return [ 
-           Action::make('view')->label('View Transaction')->icon('heroicon-o-document-text')->color('success'),
+        return [
+            Action::make('view')->label('View Transaction')->icon('heroicon-o-document-text')->color('success'),
             Tables\Actions\DeleteAction::make(),
-        ]; 
+        ];
     }
 
     public function render()

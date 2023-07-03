@@ -26,6 +26,11 @@ Route::get('/management', function () {
     return view('pages.management');
 })->middleware(['auth', 'verified'])->name('management');
 
+//account
+Route::get('/account', function () {
+    return view('pages.account');
+})->middleware(['auth', 'verified'])->name('account');
+
 //sales
 Route::get('/management/sales-transaction', function () {
     return view('pages.sales-transaction');
@@ -49,4 +54,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

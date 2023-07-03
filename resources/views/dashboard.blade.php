@@ -17,7 +17,9 @@
                         </button>
                     </div>
                     <div class="mt-1">
-                        <h1 class="text-3xl font-bold text-gray-600">&#8369;1,000,000.00</h1>
+                        <h1 class="text-3xl font-bold text-gray-600">
+                            &#8369;{{ number_format(\App\Models\SalesTransaction::pluck('total_amount')->sum(), 2) }}
+                        </h1>
                     </div>
                 </div>
                 <div class="bg-white border rounded-lg p-3 px-4">
@@ -32,7 +34,9 @@
                         </button>
                     </div>
                     <div class="mt-1">
-                        <h1 class="text-3xl font-bold text-gray-600">&#8369;100,000.00</h1>
+                        <h1 class="text-3xl font-bold text-gray-600">
+                            &#8369;{{ number_format(\App\Models\ExpenseTransaction::pluck('total_amount')->sum(), 2) }}
+                        </h1>
                     </div>
                 </div>
             </div>
