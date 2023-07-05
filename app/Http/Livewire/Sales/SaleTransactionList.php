@@ -18,10 +18,13 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use App\Models\SaleCategory;
 use App\Models\SalesCategoryTransaction;
+use Filament\Forms\Components\DatePicker;
 
 class SaleTransactionList extends Component implements Tables\Contracts\HasTable
 {
     use Tables\Concerns\InteractsWithTable;
+    public $view_transaction = false;
+    public $transaction_data = [];
 
     protected function getTableQuery(): Builder
     {
@@ -44,6 +47,7 @@ class SaleTransactionList extends Component implements Tables\Contracts\HasTable
                         'name' => $data['name'],
                         'total_amount' => $sum,
                         'user_id' => auth()->user()->id,
+                        'dot' => $data['dot'],
                     ]);
 
                     foreach ($data['category_selection'] as $key => $item) {
@@ -62,6 +66,7 @@ class SaleTransactionList extends Component implements Tables\Contracts\HasTable
                         Grid::make(3)
                             ->schema([
                                 TextInput::make('or_number')->label('Official Receipt Number')->required()->unique(),
+                                DatePicker::make('dot')->label('Date of Transaction')->required(),
                             ]),
                         Grid::make(1)
                             ->schema([
@@ -104,7 +109,12 @@ class SaleTransactionList extends Component implements Tables\Contracts\HasTable
     protected function getTableActions(): array
     {
         return [
-            Action::make('view')->label('View Transaction')->icon('heroicon-o-document-text')->color('success'),
+            Action::make('view')->label('View Transaction')->icon('heroicon-o-document-text')->color('success')->action(
+                function ($record) {
+                    $this->transaction_data = $record->sales_category_transactions;
+                    $this->view_transaction = true;
+                }
+            ),
             Tables\Actions\DeleteAction::make(),
         ];
     }

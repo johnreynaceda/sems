@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->double('total_amount');
             $table->longText('note')->nullable();
             $table->foreignId('user_id');
+            $table->date('dot');
             $table->timestamps();
         });
     }

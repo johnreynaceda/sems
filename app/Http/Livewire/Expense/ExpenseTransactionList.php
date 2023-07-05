@@ -19,11 +19,14 @@ use Filament\Forms\Components\Select;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseCategoryTransaction;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\DatePicker;
 
 class ExpenseTransactionList extends Component implements Tables\Contracts\HasTable
 {
     use Tables\Concerns\InteractsWithTable;
-
+    public $view_transaction = false;
+    public $transaction_data = [];
+    public $note;
     protected function getTableQuery(): Builder
     {
         return ExpenseTransaction::query();
@@ -46,6 +49,7 @@ class ExpenseTransactionList extends Component implements Tables\Contracts\HasTa
                         'total_amount' => $sum,
                         'note' => $data['note'],
                         'user_id' => auth()->user()->id,
+                        'dot' => $data['dot'],
                     ]);
 
                     foreach ($data['category_selection'] as $key => $item) {
@@ -64,6 +68,7 @@ class ExpenseTransactionList extends Component implements Tables\Contracts\HasTa
                         Grid::make(3)
                             ->schema([
                                 TextInput::make('voucher_number')->label('Voucher Number')->required()->unique(),
+                                DatePicker::make('dot')->label('Date of Transaction')->required(),
                             ]),
                         Grid::make(1)
                             ->schema([
@@ -100,14 +105,21 @@ class ExpenseTransactionList extends Component implements Tables\Contracts\HasTa
                 function ($record) {
                     return '₱' . number_format($record->total_amount, 2);
                 }
-            )
+            ),
+            TextColumn::make('note')->label('NOTE')->searchable()->words(5)
         ];
     }
 
     protected function getTableActions(): array
     {
         return [
-            Action::make('view')->label('View Transaction')->icon('heroicon-o-document-text')->color('success'),
+            Action::make('view')->label('View Transaction')->icon('heroicon-o-document-text')->color('success')->action(
+                function ($record) {
+                    $this->transaction_data = $record->expense_category_transactions;
+                    $this->note             = $record->note;
+                    $this->view_transaction = true;
+                }
+            ),
             Tables\Actions\DeleteAction::make(),
         ];
     }

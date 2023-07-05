@@ -10,4 +10,16 @@ class ExpenseCategoryTransaction extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function expense_transaction()
+    {
+        return $this->belongsTo(ExpenseTransaction::class);
+    }
+
+    public function expense_category()
+    {
+        return $this->belongsTo(ExpenseCategory::class);
+    }
+
+
 }

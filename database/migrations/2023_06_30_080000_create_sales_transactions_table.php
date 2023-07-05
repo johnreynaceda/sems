@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('name');
             $table->double('total_amount');
             $table->foreignId('user_id');
+            $table->date('dot');
             $table->timestamps();
         });
     }

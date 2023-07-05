@@ -10,4 +10,9 @@ class SaleCategory extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function sales_category_transactions()
+    {
+        return $this->hasMany(SalesCategoryTransaction::class);
+    }
 }
