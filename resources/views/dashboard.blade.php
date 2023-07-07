@@ -6,6 +6,43 @@
             <div class="grid grid-cols-2 gap-4 relative">
                 <div class="bg-white border rounded-lg p-3 px-4">
                     <div class="flex justify-between border-b pb-1 items-end">
+                        <h1 class="font-bold text-lg text-gray-600">TODAY SALES</h1>
+                        <button
+                            class="bg-green-600 rounded-lg grid place-content-center p-2 fill-white hover:bg-green-800">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
+                                <path
+                                    d="M11 2.04947V13.0001H21.9506C21.4489 18.0534 17.1853 22.0001 12 22.0001C6.47715 22.0001 2 17.5229 2 12.0001C2 6.81475 5.94668 2.55119 11 2.04947ZM13 0.542969C18.5535 1.02133 22.9788 5.44662 23.4571 11.0001H13V0.542969Z">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="mt-1">
+                        <h1 class="text-3xl font-bold text-gray-600">
+                            &#8369;{{ number_format(\App\Models\SalesTransaction::whereDate('dot', now())->pluck('total_amount')->sum(),2) }}
+                        </h1>
+                    </div>
+                </div>
+                <div class="bg-white border rounded-lg p-3 px-4">
+                    <div class="flex justify-between border-b pb-1 items-end">
+                        <h1 class="font-bold text-lg text-gray-600">TODAY EXPENSES</h1>
+                        <button class="bg-red-600 rounded-lg grid place-content-center p-2 fill-white hover:bg-red-800">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
+                                <path
+                                    d="M11 2.04947V13.0001H21.9506C21.4489 18.0534 17.1853 22.0001 12 22.0001C6.47715 22.0001 2 17.5229 2 12.0001C2 6.81475 5.94668 2.55119 11 2.04947ZM13 0.542969C18.5535 1.02133 22.9788 5.44662 23.4571 11.0001H13V0.542969Z">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="mt-1">
+                        <h1 class="text-3xl font-bold text-gray-600">
+                            &#8369;{{ number_format(\App\Models\SalesTransaction::whereDate('dot', now())->pluck('total_amount')->sum(),2) }}
+                        </h1>
+                    </div>
+                </div>
+                <div class="bg-white border rounded-lg p-3 px-4">
+                    <div class="flex justify-between border-b pb-1 items-end">
                         <h1 class="font-bold text-lg text-gray-600">TOTAL SALES</h1>
                         <button
                             class="bg-green-600 rounded-lg grid place-content-center p-2 fill-white hover:bg-green-800">
@@ -41,6 +78,12 @@
                 </div>
             </div>
         </div>
-        <div>sdsd</div>
+        <div>
+            <div>
+
+                <livewire:itemized-transaction />
+
+            </div>
+        </div>
     </div>
 </x-master-layout>
