@@ -47,6 +47,11 @@ Route::get('/management/expenses-category', function () {
     return view('pages.expenses-category');
 })->middleware(['auth', 'verified'])->name('expenses-category');
 
+//REPORTS
+Route::get('/reports', function () {
+    return view('pages.reports');
+})->middleware(['auth', 'verified'])->name('reports');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
